@@ -1,0 +1,52 @@
+[
+    {
+        "question": "O que significa HTML?",
+        "options": ["A. HighText Machine Language", "B. HyperText Markup Language", "C. Hyperlink and Text Markup Language", "D. HyperText Markup Level"],
+        "correctAnswer": "B"
+    },
+    {
+        "question": "Qual é a tag HTML usada para criar um link?",
+        "options": ["A. <href>", "B. <a>", "C. <link>", "D. <url>"],
+        "correctAnswer": "B"
+    },
+    {
+        "question": "Qual propriedade CSS é usada para alterar a cor do texto?",
+        "options": ["A. background-color", "B. text-color", "C. color", "D. font-color"],
+        "correctAnswer": "C"
+    },
+    {
+        "question": "Como você seleciona um elemento com a classe 'exemplo' em CSS?",
+        "options": ["A. exemplo", "B. *exemplo", "C. #exemplo", "D. .exemplo"],
+        "correctAnswer": "D"
+    },
+    {
+        "question": "Qual é a função do método 'addEventListener' em JavaScript?",
+        "options": ["A. Criar um novo evento", "B. Remover um evento de um elemento", "C. Alterar um evento existente", "D. Adicionar um evento a um elemento"],
+        "correctAnswer": "D"
+    },
+    {
+        "question": "Qual é a forma correta de declarar uma variável em JavaScript?",
+        "options": ["A. variable nome;", "B. declare nome;", "C. var nome;", "D. v nome;"],
+        "correctAnswer": "C"
+    },
+    {
+        "question": "Qual tag HTML é usada para incluir um script JavaScript?",
+        "options": ["A. <javascript>", "B. <code>", "C. <script>", "D. <js>"],
+        "correctAnswer": "C"
+    },
+    {
+        "question": "Qual é o método JavaScript usado para converter uma string em um número?",
+        "options": ["A. Number()", "B. toString()", "C. convertToNumber()", "D. parseInt()"],
+        "correctAnswer": "D"
+    },
+    {
+        "question": "O que faz a propriedade CSS 'display: none;'?",
+        "options": ["A. Exibe o elemento", "B. Muda a cor do elemento", "C. Muda o tamanho do elemento", "D. Esconde o elemento"],
+        "correctAnswer": "D"
+    },
+    {
+        "question": "Qual é a estrutura correta de um documento HTML5?",
+        "options": ["A. <html><head></head><body></body></html>", "B. <!DOCTYPE html><html><head></head><body></body></html>", "C. <doctype html><html></html>", "D. <html><body></body></html>"],
+        "correctAnswer": "B"
+    }
+]
