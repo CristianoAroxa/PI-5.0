@@ -6,6 +6,10 @@ const router = express.Router();
 router.post('/check-answers', (req, res) => {
     const { answers } = req.body;
 
+    if (!answers) {
+        return res.status(400).json({ error: 'Respostas são necessárias' });
+    }
+
     // Carregar as perguntas e respostas corretas do arquivo JSON
     const questions = JSON.parse(fs.readFileSync('data/questions.json'));
     const correctAnswers = questions.map(q => q.correctAnswer); // Extrai as respostas corretas
