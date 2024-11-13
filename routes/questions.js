@@ -5,12 +5,22 @@ const router = express.Router();
 let correctCount = 0;
 let percentage = 0;
 
+// Função para verificar se uma string contém apenas letras
+const isAlpha = (str) => /^[a-zA-Z]+$/.test(str);
+
 // Rota para verificar as respostas
 router.post('/check-answers', (req, res) => {
     const { answers } = req.body;
 
     if (!answers) {
         return res.status(400).json({ error: 'Respostas são necessárias' });
+    }
+
+    // Verifica se todas as respostas contêm apenas letras
+    for (const answer of answers) {
+        if (!isAlpha(answer)) {
+            return res.status(400).json({ error: 'Todas as respostas devem conter apenas letras' });
+        }
     }
 
     // Carregar as perguntas e respostas corretas do arquivo JSON
