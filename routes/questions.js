@@ -14,8 +14,11 @@ router.post('/check-answers', (req, res) => {
     const questions = JSON.parse(fs.readFileSync('data/questions.json'));
     const correctAnswers = questions.map(q => q.correctAnswer); // Extrai as respostas corretas
 
-    // Comparação e cálculo
-    const correctCount = answers.filter((answer, index) => answer === correctAnswers[index]).length;
+    // Comparação e cálculo, ignorando capitalização
+    const correctCount = answers.filter((answer, index) => 
+        answer.toLowerCase() === correctAnswers[index].toLowerCase()
+    ).length;
+
     const totalQuestions = correctAnswers.length;
     const percentage = (correctCount / totalQuestions) * 100;
 
