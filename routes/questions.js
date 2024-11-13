@@ -2,6 +2,9 @@ const express = require('express');
 const fs = require('fs');
 const router = express.Router();
 
+let correctCount = 0;
+let percentage = 0;
+
 // Rota para verificar as respostas
 router.post('/check-answers', (req, res) => {
     const { answers } = req.body;
@@ -15,17 +18,25 @@ router.post('/check-answers', (req, res) => {
     const correctAnswers = questions.map(q => q.correctAnswer); // Extrai as respostas corretas
 
     // Comparação e cálculo, ignorando capitalização
-    const correctCount = answers.filter((answer, index) => 
+    correctCount = answers.filter((answer, index) => 
         answer.toLowerCase() === correctAnswers[index].toLowerCase()
     ).length;
 
     const totalQuestions = correctAnswers.length;
-    const percentage = (correctCount / totalQuestions) * 100;
+    percentage = (correctCount / totalQuestions) * 100;
 
     // Retornar a resposta
     res.json({
         correctCount,
         percentage
+    });
+});
+
+// Rota GET para retornar correctCount e percentage
+router.get('/results', (req, res) => {
+    res.json({
+        correctCount,
+        percentage: `${percentage.toFixed(2)}%` // Formata a porcentagem com 2 casas decimais e adiciona o sinal de %
     });
 });
 
