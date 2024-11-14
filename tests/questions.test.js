@@ -1,15 +1,6 @@
-const request = require('supertest');
-const express = require('express');
-const bodyParser = require('body-parser');
-const questionsRoute = require('../src/routes/questions'); // Ajuste o caminho conforme necessário
-
-const app = express();
-app.use(bodyParser.json());
-app.use('/api', questionsRoute);
-
 describe('POST /api/check-answers', () => {
   it('deve retornar a contagem correta de respostas e a porcentagem', async () => {
-    const answers = ['resposta1', 'resposta2', 'resposta3']; // Substitua por respostas de teste
+    const answers = ['resposta1', 'resposta2', 'resposta3'];
     const response = await request(app)
       .post('/api/check-answers')
       .send({ answers });
@@ -25,6 +16,23 @@ describe('POST /api/check-answers', () => {
       .send({}); // Enviando um corpo vazio
 
     expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('error', 'As respostas devem ser um array de strings.');
+  });
+
+  it('deve retornar 400 se as respostas não forem um array de strings', async () => {
+    const invalidAnswers = [
+      { answer: 'resposta1' }, // Objeto em vez de string
+      123,                     // Número em vez de string
+      null,                    // null em vez de string
+      'resposta4'             // String válida para verificar misturas
+    ];
+
+    const response = await request(app)
+      .post('/api/check-answers')
+      .send({ answers: invalidAnswers });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('error', 'As respostas devem ser um array de strings.');
   });
 
   // Você pode adicionar mais testes para verificar diferentes cenários
