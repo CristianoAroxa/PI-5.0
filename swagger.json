@@ -1,0 +1,124 @@
+{
+    "openapi":"3.0.0",
+    "info": {
+        "title": "API - QUIZ - LIBERTY CURSOS",
+        "description": "API do PI 5.0 - TECHSQUAD para verificar as respostas da prova do curso de HTML/CSS/JavaScript básicos.",
+        "versio": "1.0.0",
+        "contact": {
+            "name": "Liberty Team",
+            "email": "contato@libertycursos.com"
+        }
+    },
+    "server": {
+        "url": "http://localhost:3000",
+        "description": "Local developement server"
+    },
+    "paths": {
+        "api/check-answers": {
+            "post": {
+                "sumary": "Verifica as repostas do aluno",
+                "description": "Este endpoint recebe uma lista de respostas e retorna a contagem correta e a porcentagem",
+                "tags": ["Questões"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/js on": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "answer": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "examples": {
+                                "respostas": {
+                                    "value": [
+                                        "A",
+                                        "b",
+                                        "B",
+                                        "c",
+                                        "D",
+                                        "A",
+                                        "b",
+                                        "B",
+                                        "c",
+                                        "D"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "required": ["Questões"]
+                }
+            },
+            "responses": {
+                "200":{
+                    "description": "Resposta com contagem e porcentagem das respostas",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "correctCount": {
+                                        "type": "integer"
+                                    },
+                                    "percentage": {
+                                        "type": "double"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "400": {
+                    "description": "Resposta com a mensagem de erro.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "error": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "401": {
+                    "description": "Unauthorized"
+                }
+            }
+        },
+        "api/results": {
+            "get": {
+                "sumary": "Retorna a contagem e a procentagem das respostas corretas",
+                "description": "Este endpoint retorna a contagem correta e a porcentagem",
+                "tags": ["Resultados"],
+                "security":[{"bearerAuth":[]}],
+                "parameters": [
+                    {
+                        "name": "correctCount",
+                        "in": "query",
+                        "description": "Contagem de respostas corretas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            }
+        },
+        "securitySchemas": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
