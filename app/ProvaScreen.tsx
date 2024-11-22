@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import ScreenComponent from "@/components/ScreenComponent";
+import MenuHamburguer from "@/components/MenuHamburguer";
 
 export default function ProvaScreen() {
   const [questions, setQuestions] = useState([
@@ -182,8 +183,11 @@ export default function ProvaScreen() {
 
   return (
     <ScreenComponent style={styles.screen}>
-    <Text style={styles.headerText}>Perguntas Frequentes</Text>
-    <FlatList
+<View style={styles.header}>
+          {/* <Text style={styles.headerText}>Meus Cursos</Text> */}
+          {/* <MenuHamburguer /> */}
+        </View>
+            <FlatList
       data={questions}
       renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
@@ -230,7 +234,6 @@ export default function ProvaScreen() {
   </ScreenComponent>
 );
 }
-
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -283,12 +286,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    backgroundColor: "rgba(149, 43, 149, 0.2)", // Mesma cor de fundo
+    marginBottom: 20,
+  },
   headerText: {
     fontSize: 24,
     fontWeight: "500",
     color: "#000",
-    marginBottom: 20,
     textAlign: "center",
+    flex: 1, // Isso ajuda a centralizar o título
   },
   listContainer: {
     paddingBottom: 20,
@@ -320,9 +331,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 5,
   },
-  // selectedOption: {
-  //   backgroundColor: "#4CAF50",
-  // },
   optionText: {
     fontSize: 16,
     color: "#fff",

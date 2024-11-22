@@ -6,14 +6,33 @@ import {
   StyleSheet,
   ScrollView,
   Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
-import ScreenComponent from "@/components/ScreenComponent";
-import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
+import MenuHamburguer from "@/components/MenuHamburguer";
+import Footer from "@/components/Footer";
 
-export default function Courses() {
+const CoursesScreen = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const courses = [
+    {
+      id: 1,
+      title: "Curso de Desenvolvimento Web",
+      description: "Aprenda a desenvolver apps nativos com React Native",
+    },
+    {
+      id: 2,
+      title: "Curso de Flutter",
+      description: "Domine o desenvolvimento de interfaces com Flutter",
+    },
+    {
+      id: 3,
+      title: "Curso de Laravel",
+      description: "Construa aplicações web robustas com Laravel",
+    },
+  ];
 
   const handleCoursePress = (course) => {
     setSelectedCourse(course);
@@ -26,151 +45,192 @@ export default function Courses() {
   };
 
   return (
-    <ScreenComponent style={styles.screen}>
-      <Text style={styles.headerText}>Cursos Disponíveis</Text>
-      <ScrollView contentContainerStyle={styles.coursesContainer}>
-        {[
-          { id: 1, title: "Curso de Desenvolvimento Web", description: "Aprenda a desenvolver apps nativos com React Native" },
-          { id: 2, title: "Curso de Flutter", description: "Domine o desenvolvimento de interfaces com Flutter" },
-          { id: 3, title: "Curso de Laravel", description: "Construa aplicações web robustas com Laravel" },
-        ].map((course) => (
-          <TouchableOpacity
-            key={course.id}
-            style={styles.courseCard}
-            onPress={() => handleCoursePress(course)}
-          >
-            <View style={styles.courseInfo}>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Meus Cursos</Text>
+          <MenuHamburguer />
+        </View>
+
+        {/* Course Cards */}
+        <View style={styles.coursesSection}>
+          {courses.map((course) => (
+            <TouchableOpacity
+              key={course.id}
+              style={styles.courseCard}
+              onPress={() => handleCoursePress(course)}
+            >
               <Text style={styles.courseTitle}>{course.title}</Text>
               <Text style={styles.courseDescription}>{course.description}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
 
-      {/* Modal de opções */}
+      {/* Modal */}
       {selectedCourse && (
         <Modal
-          transparent={true}
-          visible={modalVisible}
-          animationType="slide"
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>O que deseja fazer?</Text>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  closeModal();
-                  router.navigate('/CourseDetailScreen', { courseId: selectedCourse.id });
-                }}
-              >
-                <Text style={styles.modalButtonText}>Ver Curso</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  closeModal();
-                  router.navigate('/ProvaScreen', { courseId: selectedCourse.id });
-                }}
-              >
-                <Text style={styles.modalButtonText}>Realizar Prova</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.modalCloseButton} onPress={closeModal}>
-                <Text style={styles.modalCloseButtonText}>Cancelar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        transparent
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={closeModal}
+      >
+        <TouchableWithoutFeedback onPress={closeModal}>
+          <View style={{ flex: 1 }} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>{selectedCourse.title}</Text>
+          <Text style={styles.modalDescription}>
+            Escolha uma das opções abaixo para continuar:
+          </Text>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.primaryButton]}
+            onPress={() => {
+              closeModal();
+              router.navigate("/CourseDetailScreen", {
+                courseId: selectedCourse.id,
+              });
+            }}
+          >
+            <Text style={styles.modalButtonText}>Ver Curso</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.secondaryButton]}
+            onPress={() => {
+              closeModal();
+              router.navigate("/ProvaScreen", { courseId: selectedCourse.id });
+            }}
+          >
+            <Text style={styles.modalButtonText}>Realizar Prova</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.modalButton, styles.cancelButton]}
+            onPress={closeModal}
+          >
+            <Text style={styles.cancelButtonText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      
       )}
-    </ScreenComponent>
+
+      {/* Footer */}
+      <Footer />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  screen: {
+  container: {
     flex: 1,
     backgroundColor: "#fff",
-    padding: 20,
   },
-  headerText: {
-    fontFamily: "Work Sans",
-    fontWeight: "500",
-    fontSize: 24,
-    color: "#000",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  coursesContainer: {
-    alignItems: "center",
-  },
-  courseCard: {
-    width: "90%",
-    flexDirection: "row",
+  modalContainer: {
+    marginHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    elevation: 10, // Sombra para Android
+    shadowColor: "#000", // Sombra para iOS
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  
+  scrollContent: {
+    flexGrow: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 10,
-    marginBottom: 15,
+    backgroundColor: "rgba(149, 43, 149, 0.2)",
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  coursesSection: {
+    paddingHorizontal: 10,
+    marginVertical: 10,
+  },
+  courseCard: {
+    padding: 15,
+    marginVertical: 5,
+    backgroundColor: "#f9f9f9",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  courseInfo: {
-    flex: 1,
-    justifyContent: "center",
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 4,
   },
   courseTitle: {
-    fontFamily: "Work Sans",
-    fontWeight: "500",
-    fontSize: 18,
-    color: "#000",
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
   },
   courseDescription: {
-    fontFamily: "Work Sans",
-    fontWeight: "400",
     fontSize: 14,
     color: "#555",
   },
-  modalBackground: {
+  overlay: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
   },
   modalContainer: {
-    width: "80%",
+    margin: 20,
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderRadius: 20,
     padding: 20,
     alignItems: "center",
+    elevation: 6,
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 15,
-    color: "#000",
+    color: "#952b95",
+    marginBottom: 10,
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
   },
   modalButton: {
-    width: "100%",
-    padding: 12,
-    backgroundColor: Colors.highlight,
-    borderRadius: 5,
+    width: "90%",
+    padding: 15,
+    borderRadius: 10,
     alignItems: "center",
-    marginVertical: 8,
+    marginVertical: 5,
+  },
+  primaryButton: {
+    backgroundColor: "#952b95",
+  },
+  secondaryButton: {
+    backgroundColor: "#6e6ed6",
+  },
+  cancelButton: {
+    backgroundColor: "#f9f9f9",
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   modalButtonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "bold",
   },
-  modalCloseButton: {
-    marginTop: 10,
-  },
-  modalCloseButtonText: {
-    color: "#555",
-    fontSize: 14,
-    textDecorationLine: "underline",
+  cancelButtonText: {
+    color: "#333",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
+
+export default CoursesScreen;

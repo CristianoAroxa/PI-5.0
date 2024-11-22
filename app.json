@@ -23,11 +23,11 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "static"
     },
     "plugins": [
-      "expo-router",
-      "expo-font"
+      "expo-router"
+      
     ],
     "experiments": {
       "typedRoutes": true

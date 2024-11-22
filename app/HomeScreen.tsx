@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; // Instale o pacote @expo/vector-icons, caso ainda não tenha
 import { router } from "expo-router";
+import MenuHamburguer from '@/components/MenuHamburguer';
+import Footer from '@/components/Footer';
 
 const HomeScreen = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -14,15 +16,10 @@ const HomeScreen = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>Digite Aqui...</Text>
-        </View>
-        <Text style={styles.loginText}>Login</Text>
+        
+      {/* <Text style={styles.headerText}>Meus Cursos</Text> */}
 
-        {/* Menu Hambúrguer */}
-        <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
-          <MaterialIcons name="menu" size={24} color="#007AFF" />
-        </TouchableOpacity>
+        <MenuHamburguer/>
 
         {/* Modal do Menu */}
         <Modal
@@ -52,31 +49,38 @@ const HomeScreen = () => {
           <Text style={styles.offerPrice}>R$27,90</Text>
           <Text style={styles.offerDiscount}>R$169,90 | Desconto 84%</Text>
         </View>
+        <View style={styles.offerCard}>
+          <Text style={styles.offerTitle}>Conceitos GraphQl</Text>
+          <Text style={styles.offerDescription}>Aprenda GraphQl!</Text>
+          <Text style={styles.offerPrice}>R$27,90</Text>
+          <Text style={styles.offerDiscount}>R$169,90 | Desconto 84%</Text>
+        </View>
+        <View style={styles.offerCard}>
+          <Text style={styles.offerTitle}>Desenvolvimento Laravel</Text>
+          <Text style={styles.offerDescription}>Aprenda Laravel na prática criando aplicações completas!</Text>
+          <Text style={styles.offerPrice}>R$27,90</Text>
+          <Text style={styles.offerDiscount}>R$169,90 | Desconto 84%</Text>
+        </View>
       </View>
 
       {/* Recommended Courses */}
       <View style={styles.recommendedSection}>
         <Text style={styles.sectionTitle}>Cursos Recomendados</Text>
         <View style={styles.courseCard}>
+          <Text style={styles.courseTitle}>Logica de Programação com Dart</Text>
+          <Text style={styles.coursePrice}>100,00 R$</Text>
+        </View>
+        <View style={styles.courseCard}>
           <Text style={styles.courseTitle}>Java COMPLETO 2023</Text>
-          <Text style={styles.coursePrice}>200,00 R$</Text>
+          <Text style={styles.coursePrice}>87,00 R$</Text>
+        </View>
+        <View style={styles.courseCard}>
+          <Text style={styles.courseTitle}>Figma do 0</Text>
+          <Text style={styles.coursePrice}>50,00 R$</Text>
         </View>
       </View>
 
-      {/* Footer Information */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>© 2023 Liberty Cursos, Inc.</Text>
-        <View style={styles.footerLinks}>
-          <Text>Quem somos</Text>
-          <Text>Fale com Agente</Text>
-          <Text>Tá com dúvida?</Text>
-          <Text>Contato</Text>
-          <Text>Trabalhe Conosco</Text>
-          <Text>Termos</Text>
-          <Text>Política de privacidade</Text>
-          <Text>Configurações de cookie</Text>
-        </View>
-      </View>
+      <Footer/>
     </ScrollView>
   );
 };
@@ -84,33 +88,66 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
     backgroundColor: '#fff',
+    margin: 0,
+    padding: 0,
+  },
+  offersSection: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  offerCard: {
+    marginVertical: 5,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 10,
+    backgroundColor: '#f9f9f9',
+    elevation: 4, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  recommendedSection: {
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  courseCard: {
+    marginVertical: 5,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 10,
+    backgroundColor: '#f9f9f9',
+    elevation: 4, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: '#ddd',
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'rgba(149, 43, 149, 0.2)',
+    alignSelf: 'stretch',
     paddingHorizontal: 10,
-    borderRadius: 10,
   },
-  searchText: {
-    color: '#888',
-  },
-  loginText: {
-    fontSize: 16,
-    color: '#333',
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
   menuButton: {
     padding: 10,
+    elevation: 5, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   overlay: {
     flex: 1,
@@ -123,7 +160,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    elevation: 5,
+    elevation: 6, // Sombra para Android
+    shadowColor: '#000', // Sombra para iOS
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
   },
   menuItem: {
     paddingVertical: 10,
@@ -135,6 +176,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderTopWidth: 1,
     borderColor: '#ddd',
+    backgroundColor: 'rgba(120, 120, 255, 0.2)',
   },
   footerText: {
     textAlign: 'center',
@@ -147,20 +189,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingTop: 10,
   },
-  offersSection: {
-    marginTop: 20,
-  },
   offersTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  offerCard: {
-    marginTop: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    backgroundColor: '#f9f9f9',
   },
   offerTitle: {
     fontSize: 16,
@@ -182,20 +213,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#555',
   },
-  recommendedSection: {
-    marginTop: 20,
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  courseCard: {
-    marginTop: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    backgroundColor: '#f9f9f9',
   },
   courseTitle: {
     fontSize: 16,
@@ -208,5 +228,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 
 export default HomeScreen;

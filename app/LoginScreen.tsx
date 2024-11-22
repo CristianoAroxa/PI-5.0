@@ -4,15 +4,24 @@ import {
   Text,
   Image,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
 } from "react-native";
 import ScreenComponent from "@/components/ScreenComponent";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Login() {
+const saveUserData = async (data: { email: string; token: string; }) => {
+  try {
+    await AsyncStorage.setItem("@user_data", JSON.stringify(data));
+    console.log("Dados salvos com sucesso!");
+  } catch (error) {
+    console.error("Erro ao salvar dados:", error);
+  }
+};
+
+export default function Home() {
   return (
     <ScreenComponent style={styles.screen}>
       <Image style={styles.logo} source={require("./img/Logo.png")} />
@@ -23,14 +32,12 @@ export default function Login() {
 
       <View style={styles.inputsContainer}>
         <View style={styles.input}>
-          <Image style={styles.img} source={require("./img/ico-lock.png")} />
           <TextInput
             style={styles.inputText}
             placeholder="email@exemplo.com.br"
           />
         </View>
         <View style={styles.input}>
-          <Image style={styles.img} source={require("./img/ico-user.png")} />
           <TextInput
             style={styles.inputText}
             placeholder="******"
@@ -41,8 +48,12 @@ export default function Login() {
         <Button
           color={Colors.highlight}
           text={"Entrar"}
-          onPress={() => router.navigate('/HomeScreen')}
-          ></Button>
+          onPress={async () => {
+            const userData = { email: "email@exemplo.com.br", token: "abc123" };
+            await saveUserData(userData);
+            router.navigate("/HomeScreen");
+          }}
+        ></Button>
 
         <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
       </View>
@@ -50,11 +61,12 @@ export default function Login() {
       <Button
         color={Colors.secondary}
         text={"Crie sua conta"}
-        onPress={() => router.navigate('/RegisterScreen')}
+        onPress={() => router.navigate("/RegisterScreen")}
       ></Button>
     </ScreenComponent>
   );
 }
+
 
 const styles = StyleSheet.create({
   screen: {
@@ -69,14 +81,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   greeting: {
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 20,
     marginBottom: 5,
   },
   welcomeText: {
-    fontFamily: "Work Sans-Medium",
+    // fontFamily: "Work Sans-Medium",
     fontWeight: "500",
     color: "#000",
     fontSize: 18,
@@ -108,7 +120,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     flex: 1,
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 16,
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "bold",
     color: "#fff",
     fontSize: 18,
@@ -150,5 +162,10 @@ const styles = StyleSheet.create({
     height: 105,
     resizeMode: "contain", // Mantenha a proporção da imagem
     marginTop: 20,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    marginTop: 10,
   },
 });

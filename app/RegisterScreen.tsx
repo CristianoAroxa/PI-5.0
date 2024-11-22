@@ -74,14 +74,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   greeting: {
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 20,
     marginBottom: 5,
   },
   welcomeText: {
-    fontFamily: "Work Sans-Medium",
+    // fontFamily: "Work Sans-Medium",
     fontWeight: "500",
     color: "#000",
     fontSize: 18,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     flex: 1,
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 16,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   linkText: {
-    fontFamily: "Work Sans",
+    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#3B82F6",
     fontSize: 14,
