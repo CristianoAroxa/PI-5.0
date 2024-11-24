@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   Image,
   TextInput,
   StyleSheet,
+  Alert,
 } from "react-native";
 import ScreenComponent from "@/components/ScreenComponent";
 import { Colors } from "@/constants/Colors";
@@ -12,19 +13,58 @@ import Button from "@/components/Button";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const saveUserData = async (data: { email: string; token: string; }) => {
+const saveUserData = async (data: { email: string; token: string }) => {
   try {
     await AsyncStorage.setItem("@user_data", JSON.stringify(data));
     console.log("Dados salvos com sucesso!");
   } catch (error) {
     console.error("Erro ao salvar dados:", error);
+    throw new Error("Não foi possível salvar os dados localmente.");
   }
 };
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const validateInputs = (): boolean => {
+    if (!email) {
+      setErrorMessage("Por favor, insira um e-mail válido.");
+      return false;
+    }
+    if (!password) {
+      setErrorMessage("Por favor, insira sua senha.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLogin = async () => {
+    if (!validateInputs()) return;
+
+    // Lógica fictícia para autenticação
+    if (email === "usuario@exemplo.com" && password === "123456") {
+      try {
+        await saveUserData({ email, token: "mockToken123" });
+        Alert.alert("Sucesso", "Login realizado com sucesso!");
+        router.navigate("/HomeScreen");
+      } catch (error: any) {
+        setErrorMessage(error.message || "Erro inesperado ao salvar dados.");
+      }
+    } else {
+      setErrorMessage("Credenciais inválidas. Verifique e tente novamente.");
+    }
+  };
+
   return (
     <ScreenComponent style={styles.screen}>
-      <Image style={styles.logo} source={require("./img/Logo.png")} />
+      <Image
+        style={styles.logo}
+        source={require("./img/Logo.png")}
+        accessible
+        accessibilityLabel="Logotipo do aplicativo"
+      />
       <View style={styles.header}>
         <Text style={styles.greeting}>Olá!</Text>
         <Text style={styles.welcomeText}>Que bom que está aqui!</Text>
@@ -35,6 +75,12 @@ export default function Home() {
           <TextInput
             style={styles.inputText}
             placeholder="email@exemplo.com.br"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            accessible
+            accessibilityLabel="Campo para inserir o e-mail"
           />
         </View>
         <View style={styles.input}>
@@ -42,31 +88,45 @@ export default function Home() {
             style={styles.inputText}
             placeholder="******"
             secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            accessible
+            accessibilityLabel="Campo para inserir a senha"
           />
         </View>
+
+        {errorMessage ? (
+          <Text style={styles.errorMessage} accessible accessibilityLabel={errorMessage}>
+            {errorMessage}
+          </Text>
+        ) : null}
 
         <Button
           color={Colors.highlight}
           text={"Entrar"}
-          onPress={async () => {
-            const userData = { email: "email@exemplo.com.br", token: "abc123" };
-            await saveUserData(userData);
-            router.navigate("/HomeScreen");
-          }}
-        ></Button>
-
-        <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
+          onPress={handleLogin}
+          accessible
+          accessibilityLabel="Botão para realizar login"
+        />
+        <Text
+          style={styles.forgotPassword}
+          accessible
+          accessibilityLabel="Texto para recuperação de senha"
+        >
+          Esqueci minha senha
+        </Text>
       </View>
 
       <Button
         color={Colors.secondary}
         text={"Crie sua conta"}
         onPress={() => router.navigate("/RegisterScreen")}
-      ></Button>
+        accessible
+        accessibilityLabel="Botão para criar uma nova conta"
+      />
     </ScreenComponent>
   );
 }
-
 
 const styles = StyleSheet.create({
   screen: {
@@ -81,14 +141,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   greeting: {
-    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 20,
     marginBottom: 5,
   },
   welcomeText: {
-    // fontFamily: "Work Sans-Medium",
     fontWeight: "500",
     color: "#000",
     fontSize: 18,
@@ -113,54 +171,23 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  img: {
-    width: 24, // Largura do ícone
-    height: 24, // Altura do ícone
-    marginRight: 10, // Espaço entre a imagem e o TextInput
-  },
   inputText: {
     flex: 1,
-    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 16,
   },
-  signInButton: {
-    width: "100%",
-    height: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.highlight,
-    borderRadius: 30,
-    marginVertical: 10,
-  },
-  buttonText: {
-    // fontFamily: "Work Sans",
-    fontWeight: "bold",
-    color: "#fff",
-    fontSize: 18,
-  },
   forgotPassword: {
-    fontFamily: "Lato-Bold",
     fontWeight: "700",
     color: "#3B82F6",
     fontSize: 12,
     textDecorationLine: "underline",
     marginTop: 10,
   },
-  signUpButton: {
-    width: "90%",
-    height: 55,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Colors.secondary,
-    borderRadius: 30,
-    marginVertical: 10,
-  },
   logo: {
     width: 80,
     height: 105,
-    resizeMode: "contain", // Mantenha a proporção da imagem
+    resizeMode: "contain",
     marginTop: 20,
   },
   errorMessage: {
