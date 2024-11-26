@@ -6,7 +6,7 @@ let correctCount = 0;
 let percentage = 0;
 
 // Função para verificar se uma string contém apenas letras
-const isAlpha = (str) => /^[a-zA-Z]+$/.test(str);
+const isAlpha = (str) => /^[a-dA-D]+$/.test(str);
 
 // Rota para verificar as respostas
 router.post('/check-answers', (req, res) => {
