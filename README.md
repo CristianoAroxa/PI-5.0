@@ -29,7 +29,7 @@ AWS CLI (para implantação)
 ## Instalação
 Clone o repositório:
 bash
-git clone https://github.com/CristianoAroxa/deploy-api.git
+git clone https://github.com/CristianoAroxa/PI-5.0.git
 
 ## Instalar dependências:
 bash
