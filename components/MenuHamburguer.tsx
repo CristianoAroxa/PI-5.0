@@ -42,6 +42,7 @@ const MenuHamburguer = () => {
 const styles = StyleSheet.create({
   menuButton: {
     padding: 10,
+    paddingTop: 50,
     elevation: 5, // Sombra para Android
     shadowColor: '#000', // Sombra para iOS
     shadowOffset: { width: 0, height: 2 },

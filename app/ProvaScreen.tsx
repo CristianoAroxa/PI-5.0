@@ -1,3 +1,5 @@
+// http://18.209.105.224:3000/api/results
+// http://18.209.105.224:3000/api/check-answers
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -141,10 +143,10 @@ export default function ProvaScreen() {
     try {
       setLoading(true);
       // Enviar respostas para verificação
-      await axios.post("http://localhost:3000/api/check-answers", { answers });
+      await axios.post("http://18.209.105.224:3000/api/check-answers", { answers });
 
       // Buscar os resultados usando a nova rota
-      const response = await axios.get("http://localhost:3000/api/results");
+      const response = await axios.get("http://18.209.105.224:3000/api/results");
       console.log("Resultado:", response.data);
       setResult(response.data);
     } catch (error) {
