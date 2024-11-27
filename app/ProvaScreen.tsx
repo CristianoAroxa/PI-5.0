@@ -116,7 +116,7 @@ export default function ProvaScreen() {
       selectedOption: null,
     },
   ]);
-  
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [showModal, setShowModal] = useState(false); // Estado para o modal
@@ -140,8 +140,12 @@ export default function ProvaScreen() {
     const answers = questions.map((q) => q.selectedOption);
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:3000/api/check-answers", { answers });
-      console.log("Resposta da API:", response.data); // Exibe o resultado da requisição no console
+      // Enviar respostas para verificação
+      await axios.post("http://localhost:3000/api/check-answers", { answers });
+
+      // Buscar os resultados usando a nova rota
+      const response = await axios.get("http://localhost:3000/api/results");
+      console.log("Resultado:", response.data);
       setResult(response.data);
     } catch (error) {
       console.error("Erro ao verificar respostas:", error);
@@ -149,6 +153,7 @@ export default function ProvaScreen() {
       setLoading(false);
     }
   };
+
 
   const renderItem = ({ item }) => (
     <View style={styles.questionContainer}>
@@ -178,61 +183,62 @@ export default function ProvaScreen() {
       </View>
     </View>
   );
-  
-  
+
+
 
   return (
     <ScreenComponent style={styles.screen}>
-<View style={styles.header}>
-          {/* <Text style={styles.headerText}>Meus Cursos</Text> */}
-          {/* <MenuHamburguer /> */}
-        </View>
-            <FlatList
-      data={questions}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={styles.listContainer}
-    />
-
-    <TouchableOpacity style={styles.button} onPress={checkAnswers}>
-      <Text style={styles.buttonText}>Verificar Respostas</Text>
-    </TouchableOpacity>
-
-    {loading && <ActivityIndicator size="large" color="#0000ff" />}
-    {result && (
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>
-          Respostas corretas: {result.correctCount} de {questions.length}
-        </Text>
-        <Text style={styles.resultText}>
-          Porcentagem: {result.percentage.toFixed(2)}%
-        </Text>
+      <View style={styles.header}>
+        {/* <Text style={styles.headerText}>Meus Cursos</Text> */}
+        {/* <MenuHamburguer /> */}
       </View>
-    )}
+      <FlatList
+        data={questions}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+      />
 
-    {/* Modal para perguntas em aberto */}
-    <Modal
-      visible={showModal}
-      transparent={true}
-      animationType="slide"
-      onRequestClose={() => setShowModal(false)}
-    >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalText}>
-            Há perguntas em aberto! Responda todas antes de verificar.
+      <TouchableOpacity style={styles.button} onPress={checkAnswers}>
+        <Text style={styles.buttonText}>Verificar Respostas</Text>
+      </TouchableOpacity>
+
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
+      {result && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>
+            Respostas corretas: {result.correctCount} de {questions.length}
           </Text>
-          <TouchableOpacity
-            style={styles.modalButton}
-            onPress={() => setShowModal(false)}
-          >
-            <Text style={styles.modalButtonText}>OK</Text>
-          </TouchableOpacity>
+          <Text style={styles.resultText}>
+            Porcentagem: {result.percentage}
+          </Text>
         </View>
-      </View>
-    </Modal>
-  </ScreenComponent>
-);
+      )}
+
+
+      {/* Modal para perguntas em aberto */}
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Há perguntas em aberto! Responda todas antes de verificar.
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowModal(false)}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </ScreenComponent>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -280,7 +286,7 @@ const styles = StyleSheet.create({
   selectedOptionMeaning: {
     color: "#fff", // Descrição também fica em branco quando selecionado
   },
-  
+
   screen: {
     flex: 1,
     backgroundColor: "#fff",
