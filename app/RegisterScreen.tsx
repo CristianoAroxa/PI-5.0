@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,13 +6,38 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import ScreenComponent from "@/components/ScreenComponent";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RegisterScreen() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = () => {
+    if (!name || !email || !password) {
+      Alert.alert("Erro", "Preencha todos os campos!");
+      return;
+    }
+
+    // Salvar os dados no armazenamento local
+    // Substitua por uma chamada de API no futuro, se necessário.
+    const userData = { name, email, password };
+    AsyncStorage.setItem("userData", JSON.stringify(userData))
+      .then(() => {
+        Alert.alert("Sucesso", "Conta criada com sucesso!");
+        router.navigate("/LoginScreen");
+      })
+      .catch(() => {
+        Alert.alert("Erro", "Houve um problema ao salvar os dados.");
+      });
+  };
+
   return (
     <ScreenComponent style={styles.screen}>
       <Image style={styles.logo} source={require("./img/Logo.png")} />
@@ -26,13 +51,17 @@ export default function RegisterScreen() {
           <TextInput
             style={styles.inputText}
             placeholder="Seu Nome"
+            value={name}
+            onChangeText={setName}
           />
         </View>
         <View style={styles.input}>
-        <Image style={styles.img} source={require("./img/ico-user.png")} />
-        <TextInput
+          <Image style={styles.img} source={require("./img/ico-user.png")} />
+          <TextInput
             style={styles.inputText}
             placeholder="email@exemplo.com.br"
+            value={email}
+            onChangeText={setEmail}
           />
         </View>
         <View style={styles.input}>
@@ -41,21 +70,23 @@ export default function RegisterScreen() {
             style={styles.inputText}
             placeholder="******"
             secureTextEntry
+            value={password}
+            onChangeText={setPassword}
           />
         </View>
 
         <Button
           color={Colors.highlight}
           text={"Registrar"}
-          onPress={() => router.navigate('/LoginScreen')}
-          />
+          onPress={handleRegister}
+        />
       </View>
 
-      <TouchableOpacity style={styles.signInLink}         onPress={() => router.push("/LoginScreen")}
+      <TouchableOpacity
+        style={styles.signInLink}
+        onPress={() => router.push("/LoginScreen")}
       >
-        <Text style={styles.linkText}>
-          Já tem uma conta? Faça login
-        </Text>
+        <Text style={styles.linkText}>Já tem uma conta? Faça login</Text>
       </TouchableOpacity>
     </ScreenComponent>
   );
@@ -74,17 +105,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   greeting: {
-    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 20,
     marginBottom: 5,
-  },
-  welcomeText: {
-    // fontFamily: "Work Sans-Medium",
-    fontWeight: "500",
-    color: "#000",
-    fontSize: 18,
   },
   inputsContainer: {
     width: "90%",
@@ -107,13 +131,12 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   img: {
-    width: 24, // Largura do ícone
-    height: 24, // Altura do ícone
-    marginRight: 10, // Espaço entre a imagem e o TextInput
+    width: 24,
+    height: 24,
+    marginRight: 10,
   },
   inputText: {
     flex: 1,
-    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#000",
     fontSize: 16,
@@ -122,7 +145,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   linkText: {
-    // fontFamily: "Work Sans",
     fontWeight: "400",
     color: "#3B82F6",
     fontSize: 14,
@@ -131,7 +153,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 105,
-    resizeMode: "contain", // Mantenha a proporção da imagem
+    resizeMode: "contain",
     marginTop: 20,
   },
 });

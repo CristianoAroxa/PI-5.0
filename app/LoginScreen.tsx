@@ -40,20 +40,38 @@ export default function Home() {
     return true;
   };
 
-  const handleLogin = async () => {
-    if (!validateInputs()) return;
+  // const handleLogin = async () => {
+  //   if (!validateInputs()) return;
 
-    // Lógica fictícia para autenticação
-    if (email === "usuario@exemplo.com" && password === "123456") {
-      try {
-        await saveUserData({ email, token: "mockToken123" });
-        Alert.alert("Sucesso", "Login realizado com sucesso!");
-        router.navigate("/HomeScreen");
-      } catch (error: any) {
-        setErrorMessage(error.message || "Erro inesperado ao salvar dados.");
-      }
+  //   // Lógica fictícia para autenticação
+  //   if (email === "usuario@exemplo.com" && password === "123456") {
+  //     try {
+  //       await saveUserData({ email, token: "mockToken123" });
+  //       Alert.alert("Sucesso", "Login realizado com sucesso!");
+  //       router.navigate("/HomeScreen");
+  //     } catch (error: any) {
+  //       setErrorMessage(error.message || "Erro inesperado ao salvar dados.");
+  //     }
+  //   } else {
+  //     setErrorMessage("Credenciais inválidas. Verifique e tente novamente.");
+  //   }
+  // };
+
+  const handleLogin = async () => {
+    const storedUserData = await AsyncStorage.getItem("userData");
+
+    if (!storedUserData) {
+      Alert.alert("Erro", "Nenhum usuário encontrado!");
+      return;
+    }
+
+    const { email: storedEmail, password: storedPassword } = JSON.parse(storedUserData);
+
+    if (email === storedEmail && password === storedPassword) {
+      Alert.alert("Sucesso", "Login realizado com sucesso!");
+      router.push("/HomeScreen");
     } else {
-      setErrorMessage("Credenciais inválidas. Verifique e tente novamente.");
+      Alert.alert("Erro", "Credenciais inválidas!");
     }
   };
 
@@ -105,8 +123,8 @@ export default function Home() {
           color={Colors.highlight}
           text={"Entrar"}
           onPress={handleLogin}
-          accessible
-          accessibilityLabel="Botão para realizar login"
+          // accessible
+          // accessibilityLabel="Botão para realizar login"
         />
         <Text
           style={styles.forgotPassword}
@@ -121,8 +139,8 @@ export default function Home() {
         color={Colors.secondary}
         text={"Crie sua conta"}
         onPress={() => router.navigate("/RegisterScreen")}
-        accessible
-        accessibilityLabel="Botão para criar uma nova conta"
+        // accessible
+        // accessibilityLabel="Botão para criar uma nova conta"
       />
     </ScreenComponent>
   );
