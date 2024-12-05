@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    fontFamily: 'Work Sans',
+    // fontFamily: 'Work Sans',
     fontWeight: 'bold',
     color: '#fff',
     fontSize: 18,
